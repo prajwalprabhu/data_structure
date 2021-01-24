@@ -1,7 +1,7 @@
 //Solve Post fix expression
 fn to_result(result: Vec<char>) -> u32 {
     let mut stack: Vec<u32> = Vec::new(); //Stack
-    let operator = "*/+-%^";
+    let operator = "*/+-";
     for i in result {
         if operator.contains(i) {
             let a = stack.pop().unwrap();
@@ -11,7 +11,7 @@ fn to_result(result: Vec<char>) -> u32 {
                 '-' => stack.push(b - a),
                 '/' => stack.push(b / a),
                 '*' => stack.push(b * a),
-                '^' => stack.push(b.pow(a)),
+                // '^' => stack.push(b.pow(a)),
                 _ => panic!("Something went wrong"),
             }
         } else {
@@ -20,23 +20,46 @@ fn to_result(result: Vec<char>) -> u32 {
     }
     stack.pop().unwrap()
 }
-//Checks whether there is any power equatio in goven equatio i.e 2^3=8
-fn check(eq: String) -> u32 {
+//Checks whether there is any power equatio in goven equatio i.e 2^3=8 or (1+1)^3=8
+fn eval(eq: String) -> u32 {
     let mut eq: Vec<char> = eq.chars().collect();
-    let mut result: u32;
+    let result: u32;
+    let a: char;
+    let b: char;
+    let mut eq2: Vec<char> = Vec::new();
     if eq.contains(&'^') {
         for i in 0..eq.len() - 1 {
             if eq[i] == '^' {
-                let a: char = eq[i - 1];
-                let b: char = eq[i + 1];
-                let a: u32 = a.to_digit(10).unwrap();
-                let b: u32 = b.to_digit(10).unwrap();
-                result = a.pow(b);
-                let result = format!("{}", result);
-                eq.remove(i - 1);
-                eq.remove(i - 1);
-                eq.remove(i - 1);
-                eq.insert(i - 1, result.chars().next().unwrap());
+                a = eq[i - 1];
+                b = eq[i + 1];
+                if a == ')' {
+                    let mut j = i - 2;
+                    eq.remove(i - 1);
+                    while j > 0 {
+                        if eq[j] == '(' {
+                            eq.remove(j);
+                            break;
+                        }
+                        eq2.insert(0, eq.remove(j));
+                        j -= 1;
+                    }
+                    let mut eq2_str = String::new();
+                    eq2.iter().for_each(|x| eq2_str.push(*x));
+                    let res2 = eval(eq2_str);
+                    let res2 = format!("{}", res2);
+                    eq.insert(j, res2.chars().next().unwrap());
+                    break;
+                } else {
+                    let a: u32 = a.to_digit(10).unwrap();
+                    let b: u32 = b.to_digit(10).unwrap();
+                    result = a.pow(b);
+                    let result = format!("{}", result);
+                    eq.remove(i - 1);
+                    eq.remove(i - 1);
+                    eq.remove(i - 1);
+                    eq.insert(i - 1, result.chars().next().unwrap());
+                    break;
+                }
             }
         }
     }
@@ -44,13 +67,16 @@ fn check(eq: String) -> u32 {
     eq.iter().for_each(|i| {
         result.push(*i);
     });
+    if eq.contains(&'^') {
+        return eval(result);
+    }
     to_result(to_post(result))
 }
 //Program to Convert Infix to Postfix Expression
 fn to_post(eq: String) -> Vec<char> {
     let mut stack: Vec<char> = Vec::new(); //Stack
     let mut output: Vec<char> = Vec::new(); //Output
-    let operator = "*/+-^";
+    let operator = "*/+-";
     for i in eq.chars() {
         if i == '(' {
             stack.push(i);
@@ -96,9 +122,12 @@ fn to_post(eq: String) -> Vec<char> {
     output
 }
 pub fn run() {
-    let infix = String::from("2*3/(4-1)+5*3^2");
+    // let infix = String::from("2*3/(4-1)^2+5*3");
+    let infix = String::from("2+3*4+(3-3)^2");
+    // let infix = String::from("1+23");
+    // let infix = String::from("2*3^2/(4-1)+5*3");
     // let result = to_post(infix.clone());
-    println!("infix = {:?}\nPostfix = {:?}", infix, check(infix.clone()));
+    println!("infix = {:?}\nPostfix = {:?}", infix, eval(infix.clone()));
     // println!(" Infix = {:?},PostFix = {:?}", infix, result);
     // println!("Result = {:?}", to_result(result));
     // let infix = String::from("(A+B)*C-(D-E)*(F+G)");
