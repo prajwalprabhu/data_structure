@@ -22,6 +22,7 @@ fn to_result(result: Vec<char>) -> u32 {
 }
 //Checks whether there is any power equatio in goven equatio i.e 2^3=8 or (1+1)^3=8
 fn eval(eq: String) -> u32 {
+    println!("eq = {:?}", eq);
     let mut eq: Vec<char> = eq.chars().collect();
     let result: u32;
     let a: char;
@@ -31,16 +32,28 @@ fn eval(eq: String) -> u32 {
         for i in 0..eq.len() - 1 {
             if eq[i] == '^' {
                 a = eq[i - 1];
+
                 b = eq[i + 1];
                 if a == ')' {
                     let mut j = i - 2;
+
+                    let mut open = 0;
                     eq.remove(i - 1);
                     while j > 0 {
+                        if eq[j] == ')' {
+                            open += 1;
+                        }
                         if eq[j] == '(' {
-                            eq.remove(j);
-                            break;
+                            if open > 0 {
+                                open -= 1;
+                            } else {
+                                eq.remove(j);
+
+                                break;
+                            }
                         }
                         eq2.insert(0, eq.remove(j));
+
                         j -= 1;
                     }
                     let mut eq2_str = String::new();
@@ -48,6 +61,7 @@ fn eval(eq: String) -> u32 {
                     let res2 = eval(eq2_str);
                     let res2 = format!("{}", res2);
                     eq.insert(j, res2.chars().next().unwrap());
+
                     break;
                 } else {
                     let a: u32 = a.to_digit(10).unwrap();
@@ -58,6 +72,7 @@ fn eval(eq: String) -> u32 {
                     eq.remove(i - 1);
                     eq.remove(i - 1);
                     eq.insert(i - 1, result.chars().next().unwrap());
+
                     break;
                 }
             }
@@ -122,8 +137,9 @@ fn to_post(eq: String) -> Vec<char> {
     output
 }
 pub fn run() {
-    // let infix = String::from("2*3/(4-1)^2+5*3");
-    let infix = String::from("2+3*4+(3-3)^2");
+    // let infix = String::from("2*3/(
+    // 4-1)^2+5*3");
+    let infix = String::from("2+3*4+(3-(4-(2-(2-1))))^2");
     // let infix = String::from("1+23");
     // let infix = String::from("2*3^2/(4-1)+5*3");
     // let result = to_post(infix.clone());
