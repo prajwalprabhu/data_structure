@@ -1,4 +1,4 @@
-mod infix;
+mod infix2;
 fn main() {
-    infix::run()
+    infix2::run()
 }
