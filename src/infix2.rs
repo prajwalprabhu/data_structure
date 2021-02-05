@@ -169,10 +169,10 @@ fn to_post(eq: Vec<String>) -> Vec<String> {
     output
 }
 pub fn run() {
-    let infix = String::from("22+3*4+(1+2)*3"); // answer 43
+    // let infix = String::from("22+3*4+(1+2)*3"); // answer 43
                                                 // let infix = String::from("1+23"); // answer 24
                                                 // let infix = String::from("2*3^2/(4-1)+5*3"); // answer 21
-                                                // let infix = String::from("2+3*4+(3-(4-(2-(2-1))))^2"); // answer 14
+                                                let infix = String::from("2+3*4+(3-(4-(2-(2-1))))^2"); // answer 14
                                                 // let result = to_post(infix.clone());
     println!(
         "infix = {:?}\nPostfix = {:?}",
