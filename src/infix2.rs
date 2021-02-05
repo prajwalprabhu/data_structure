@@ -1,4 +1,24 @@
 //Solve Post fix expression
+fn eval(eq:String) -> u32 {
+    check(eq.clone());
+    to_result(to_post(power(to_vec(eq))))
+
+}
+fn check(eq:String) {
+    let eq=eq.clone();
+    let mut count =0;
+    for i in eq.chars() {
+        if i=='('{
+            count += 1;
+        }
+        if i==')'{
+            count -=1;
+        }
+    }
+    if count!=0{
+        panic!("Unpaired Braces");
+    }
+}
 fn to_result(result: Vec<String>) -> u32 {
     let mut stack: Vec<u32> = Vec::new(); //Stack
     let operator = "*/+-".to_string();
@@ -23,9 +43,10 @@ fn to_result(result: Vec<String>) -> u32 {
     }
     stack.pop().unwrap()
 }
-//Checks whether there is any power equatio in goven equatio i.e 2^3=8 or (1+1)^3=8
-fn eval(mut eq: Vec<String>) -> u32 {
-    println!("eq = {:?}", eq);
+
+//Checks whether there is any power equation in given equation i.e 2^3=8 or (1+1)^3=8
+fn power(mut eq: Vec<String>) -> Vec<String> {
+    // println!("eq = {:?}", eq);
     let result: u32;
     let a: String;
     let b: String;
@@ -54,7 +75,7 @@ fn eval(mut eq: Vec<String>) -> u32 {
                         eq2.insert(0, eq.remove(j));
                         j -= 1;
                     }
-                    let res2 = eval(eq2.clone());
+                    let res2 = to_result(to_post(power(eq2.clone())));
                     let res2 = format!("{}", res2);
                     eq.insert(j, res2);
                     break;
@@ -73,9 +94,10 @@ fn eval(mut eq: Vec<String>) -> u32 {
         }
     }
     if eq.contains(&'^'.to_string()) {
-        return eval(eq);
+        return power(eq);
     }
-    to_result(to_post(eq))
+    // to_result(to_post(eq))
+    eq
 }
 
 fn to_vec(eq: String) -> Vec<String> {
@@ -155,6 +177,8 @@ pub fn run() {
     println!(
         "infix = {:?}\nPostfix = {:?}",
         infix,
-        eval(to_vec(infix.clone()))
+        // eval(infix.clone())
+        eval(infix.clone())
     );
+
 }
