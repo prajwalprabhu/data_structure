@@ -33,20 +33,21 @@ Algorithm for Infix to Postfix
 
 
 #Evaluating a postfix expression using stack
- The postfix expression to be evaluated is scanned from left to right.
- Each operator in a postfix string refers to the previous two operands
-in the string.
- Each time we read an operand we push it into a stack. When we
-reach an operator, its operands will then be top two elements on
-the stack.
- We can then pop these two elements, perform the indicated operation
-on them, and push the result on the stack.
- So that it will be available for use as an operand of the next operator.
- Initialize an empty stack.
- While character remain in the input stream
- Read next character.
- If character is an operand, push it into the stack.
- Else, if character is an operator, pop top two characters off the
-stack, apply the operator, and push the answer back into the
-stack.
- Pop the answer off the stack.
+
+* The postfix expression to be evaluated is scanned from left to right.
+* Each operator in a postfix string refers to the previous two operands
+  in the string.
+* Each time we read an operand we push it into a stack. When we
+  reach an operator, its operands will then be top two elements on
+  the stack.
+* We can then pop these two elements, perform the indicated operation
+  on them, and push the result on the stack.
+* So that it will be available for use as an operand of the next operator.
+* Initialize an empty stack.
+* While character remain in the input stream
+* Read next character.
+* If character is an operand, push it into the stack.
+* Else, if character is an operator, pop top two characters off the
+  stack, apply the operator, and push the answer back into the
+  stack.
+* Pop the answer off the stack.
