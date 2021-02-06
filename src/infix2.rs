@@ -1,23 +1,25 @@
 //Solve Post fix expression
-fn eval(eq:String) -> u32 {
+fn eval(eq: String) -> u32 {
     check(eq.clone());
     to_result(to_post(power(to_vec(eq))))
-
 }
-fn check(eq:String) {
-    let eq=eq.clone();
-    let mut count =0;
+fn check(eq: String) {
+    let eq = eq.clone();
+    let mut count = 0;
     for i in eq.chars() {
-        if i=='('{
+        if i == '(' {
             count += 1;
         }
-        if i==')'{
-            count -=1;
+        if i == ')' {
+            count -= 1;
         }
     }
-    if count!=0{
-        panic!("Unpaired Braces");
+    if count > 0 {
+        panic!("Braces opened but not closed");
     }
+    if count<0{
+		panic!("Extra closing Braces");
+	}
 }
 fn to_result(result: Vec<String>) -> u32 {
     let mut stack: Vec<u32> = Vec::new(); //Stack
@@ -170,15 +172,12 @@ fn to_post(eq: Vec<String>) -> Vec<String> {
 }
 pub fn run() {
     // let infix = String::from("22+3*4+(1+2)*3"); // answer 43
-                                                // let infix = String::from("1+23"); // answer 24
-                                                // let infix = String::from("2*3^2/(4-1)+5*3"); // answer 21
-                                                let infix = String::from("2+3*4+(3-(4-(2-(2-1))))^2"); // answer 14
-                                                // let result = to_post(infix.clone());
+    // let infix = String::from("1+23"); // answer 24
+    // let infix = String::from("2*3^2/(4-1)+5*3"); // answer 21
+    let infix = String::from("2+3*4+(3-(4-(2-(2-1))))^2"); // answer 14
     println!(
         "infix = {:?}\nPostfix = {:?}",
         infix,
-        // eval(infix.clone())
         eval(infix.clone())
     );
-
 }
