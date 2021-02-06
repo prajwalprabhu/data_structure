@@ -18,8 +18,11 @@ Algorithm for Infix to Postfix
 2. If it is operand, output it.
 3. If it is opening parenthesis, push it on stack.
 4. If it is an operator, then
+
    *If stack is empty, push operator on stack.
+   
    *If the top of stack is opening parenthesis, push operator on stack
+   
    *If it has higher priority than the top of stack, push operator on
 	stack.
    *Else pop the operator from the stack and output it, repeat step 4.
