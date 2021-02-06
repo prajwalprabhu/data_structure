@@ -6,4 +6,3 @@ git checkout main &&
 git merge test &&
 git push origin &&
 git checkout test 
- 
