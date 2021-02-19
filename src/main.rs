@@ -1,4 +1,4 @@
-mod infix2;
+mod toBinary;
 fn main() {
-    infix2::run()
+    toBinary::run(8);
 }
