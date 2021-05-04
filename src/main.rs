@@ -1,4 +1,4 @@
 mod toBinary;
 fn main() {
-    toBinary::run(8);
+    toBinary::run(16);
 }

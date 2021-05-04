@@ -1,5 +1,5 @@
 [package]
-name = "demo"
+name = "datastructure"
 version = "0.1.0"
 authors = ["coolpp"]
 edition = "2018"
