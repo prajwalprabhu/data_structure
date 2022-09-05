@@ -4,7 +4,7 @@ fn eval(eq: String) -> u32 {
     to_result(to_post(power(to_vec(eq))))
 }
 fn check(eq: String) {
-    let eq = eq.clone();
+    let eq = eq;
     let mut count = 0;
     for i in eq.chars() {
         if i == '(' {
@@ -17,15 +17,15 @@ fn check(eq: String) {
     if count > 0 {
         panic!("Braces opened but not closed");
     }
-    if count<0{
-		panic!("Extra closing Braces");
-	}
+    if count < 0 {
+        panic!("Extra closing Braces");
+    }
 }
 fn to_result(result: Vec<String>) -> u32 {
     let mut stack: Vec<u32> = Vec::new(); //Stack
     let operator = "*/+-".to_string();
     for i in result {
-        if i != "" {
+        if !i.is_empty() {
             if operator.contains(&i) {
                 let a = stack.pop().unwrap();
                 let b = stack.pop().unwrap();
@@ -98,7 +98,6 @@ fn power(mut eq: Vec<String>) -> Vec<String> {
     if eq.contains(&'^'.to_string()) {
         return power(eq);
     }
-    // to_result(to_post(eq))
     eq
 }
 
@@ -108,7 +107,7 @@ fn to_vec(eq: String) -> Vec<String> {
     let mut result: Vec<String> = Vec::new();
     for i in eq.chars() {
         if operator.contains(i) {
-            if operand != "" {
+            if !operand.is_empty() {
                 result.push(operand.clone());
                 operand = String::new();
             }
@@ -130,10 +129,7 @@ fn to_post(eq: Vec<String>) -> Vec<String> {
             stack.push(i);
         } else if operator.contains(&i) {
             loop {
-                if stack.len() == 0 {
-                    stack.push(i);
-                    break;
-                } else if stack[stack.len() - 1] == '('.to_string() {
+                if stack.is_empty() || stack[stack.len() - 1] == '('.to_string() {
                     stack.push(i);
                     break;
                 } else if i == '*'.to_string() || i == '/'.to_string() {
@@ -152,7 +148,7 @@ fn to_post(eq: Vec<String>) -> Vec<String> {
                 }
             }
         } else if i == ')'.to_string() {
-            while stack.len() != 0 {
+            while !stack.is_empty() {
                 let a = stack.pop().unwrap();
                 if a == '('.to_string() {
                     break;
@@ -164,20 +160,26 @@ fn to_post(eq: Vec<String>) -> Vec<String> {
         }
         println!(" Stack = {:?} , output is {:?}", stack, output);
     }
-    for _ in 0..stack.len() {
-        output.push(stack.pop().unwrap());
-    }
-    println!(" Stack = {:?} , output is {:?}", stack, output);
+    output.extend(stack.into_iter().rev());
     output
 }
-pub fn run() {
-    // let infix = String::from("22+3*4+(1+2)*3"); // answer 43
-    // let infix = String::from("1+23"); // answer 24
-    // let infix = String::from("2*3^2/(4-1)+5*3"); // answer 21
-    let infix = String::from("2+3*4+(3-(4-(2-(2-1))))^2"); // answer 14
-    println!(
-        "infix = {:?}\nPostfix = {:?}",
-        infix,
-        eval(infix.clone())
-    );
+
+#[cfg(test)]
+mod test_infix {
+    use super::*;
+
+    #[test]
+    fn infix() {
+        let inputs = [
+            String::from("2+3*4+(3-(4-(2-(2-1))))^2"),
+            String::from("2*3^2/(4-1)+5*3"),
+            String::from("1+23"),
+            String::from("22+3*4+(1+2)*3"),
+        ];
+        let outputs = [14, 21, 24, 43];
+        assert_eq!(inputs.len(), outputs.len());
+        for i in 0..inputs.len() {
+            assert_eq!(eval(inputs[i].clone()), outputs[i]);
+        }
+    }
 }
